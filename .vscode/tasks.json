@@ -1,0 +1,64 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build 8051 Project",
+            "type": "shell",
+            "command": "E:/keil_c51/C51/BIN/C51.EXE",
+            "args": [
+                "src/main.c",
+                "DEBUG",
+                "CODE",
+                "OMF2",
+                "OBJECTEXTEND",
+                "BROWSE",
+                "OPTIMIZE(8,SPEED)"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": {
+                "owner": "c",
+                "fileLocation": ["relative", "${workspaceRoot}"],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        }
+    ]
+}
+
+// {
+//     "version": "2.0.0",
+//     "tasks": [
+//       {
+//         "label": "g++",
+//         "command": "E:\\mingw64\\bin\\g++.exe",
+//         "args": [
+//           "-g",
+//           "${fileDirname}/*.cpp",
+//           "-o",
+//           "${fileDirname}\\${fileBasenameNoExtension}.exe"
+//         ],
+//         "options": {
+//             "cwd": "E:\\mingw64\\bin"	/*修改成自己bin目录，这里的路径和电脑里复制的文件目录有一点不一样，这里是两个反斜杠\\*/
+//         },
+//         "problemMatcher":[
+//             "$gcc"
+//         ],
+//         "group": "build",
+//       }
+//     ]
+//   }
