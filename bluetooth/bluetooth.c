@@ -1,6 +1,7 @@
 #include "public/public.h"
 #include "bluetooth.h"
 #include "monitor/monitor.h"
+#include "pwm/pwm.h"
 
 
 
@@ -87,7 +88,7 @@ void UART_ISR(void) interrupt 4 {
             case '1':  // 低速
             case '2':  // 中速
             case '3':  // 高速
-                Motor_SetSpeed(received_data);
+                MotorSpeedSet(received_data)
                 break;
                 
             default:
