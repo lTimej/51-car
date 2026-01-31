@@ -1,4 +1,4 @@
-C51 COMPILER V9.57.0.0   BLUETOOTH                                                         01/31/2026 18:51:24 PAGE 1   
+C51 COMPILER V9.57.0.0   BLUETOOTH                                                         01/31/2026 19:06:00 PAGE 1   
 
 
 C51 COMPILER V9.57.0.0, COMPILATION OF MODULE BLUETOOTH
@@ -62,7 +62,7 @@ line level    source
   53   1          if(RI) {
   54   2              RI = 0;                    // 清除接收中断标志
   55   2              received_data = SBUF;      // 读取接收到的数据
-C51 COMPILER V9.57.0.0   BLUETOOTH                                                         01/31/2026 18:51:24 PAGE 2   
+C51 COMPILER V9.57.0.0   BLUETOOTH                                                         01/31/2026 19:06:00 PAGE 2   
 
   56   2              
   57   2              // 状态指示灯闪烁
@@ -126,7 +126,7 @@ line level    source
  115   2              // 回显接收到的字符
  116   2              UART_SendChar(received_data);
  117   2              UART_SendChar('\r');
-C51 COMPILER V9.57.0.0   BLUETOOTH                                                         01/31/2026 18:51:24 PAGE 3   
+C51 COMPILER V9.57.0.0   BLUETOOTH                                                         01/31/2026 19:06:00 PAGE 3   
 
  118   2              UART_SendChar('\n');
  119   2          }

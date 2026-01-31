@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    01/31/2026  18:51:25  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    01/31/2026  19:06:00  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
@@ -33,14 +33,15 @@ LINK MAP OF MODULE:  MAIN (MAIN)
 
             * * * * * * *   D A T A   M E M O R Y   * * * * * * *
             REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
-            DATA    0008H     0015H     UNIT         ?DT?SONIC
-            DATA    001DH     0002H     UNIT         ?DT?PWM
-            DATA    001FH     0001H     UNIT         ?DT?PUBLIC
+            DATA    0008H     0005H     UNIT         _DATA_GROUP_
+            DATA    000DH     0002H     UNIT         ?DT?PWM
+            DATA    000FH     0001H     UNIT         ?DT?PUBLIC
+            DATA    0010H     0001H     UNIT         ?DT?MONITOR
+                    0011H     000FH                  *** GAP ***
             BIT     0020H.0   0000H.1   UNIT         ?BI?PUBLIC
                     0020H.1   0000H.7                *** GAP ***
-            DATA    0021H     0005H     UNIT         _DATA_GROUP_
-            DATA    0026H     0001H     UNIT         ?DT?MONITOR
-            IDATA   0027H     0001H     UNIT         ?STACK
+            DATA    0021H     0021H     UNIT         ?DT?SONIC
+            IDATA   0042H     0001H     UNIT         ?STACK
 
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
             CODE    0000H     0003H     ABSOLUTE     
@@ -50,39 +51,39 @@ LINK MAP OF MODULE:  MAIN (MAIN)
             CODE    0023H     0003H     ABSOLUTE     
                     0026H     07DAH                  *** GAP ***
             CODE    0800H     00F9H     UNIT         ?PR?UART_ISR?BLUETOOTH
-            CODE    08F9H     00A9H     UNIT         ?PR?DISPLAY?SONIC
-            CODE    09A2H     00A6H     UNIT         ?C?LIB_CODE
-            CODE    0A48H     008CH     UNIT         ?C_C51STARTUP
-            CODE    0AD4H     005FH     UNIT         ?PR?MAIN?MAIN
-            CODE    0B33H     005DH     UNIT         ?PR?_MOTORSPEEDSET?PWM
-            CODE    0B90H     0057H     UNIT         ?CO?MAIN
-            CODE    0BE7H     0051H     UNIT         ?CO?BLUETOOTH
-            CODE    0C38H     003EH     UNIT         ?PR?TIMER0_ISR?MONITOR
-            CODE    0C76H     002CH     UNIT         ?C_INITSEG
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  01/31/2026  18:51:25  PAGE 2
+            CODE    08F9H     00D7H     UNIT         ?PR?DISPLAY?SONIC
+            CODE    09D0H     00A6H     UNIT         ?C?LIB_CODE
+            CODE    0A76H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0B02H     005FH     UNIT         ?PR?MAIN?MAIN
+            CODE    0B61H     005DH     UNIT         ?PR?_MOTORSPEEDSET?PWM
+            CODE    0BBEH     0057H     UNIT         ?CO?MAIN
+            CODE    0C15H     0051H     UNIT         ?CO?BLUETOOTH
+            CODE    0C66H     003EH     UNIT         ?PR?TIMER0_ISR?MONITOR
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  01/31/2026  19:06:00  PAGE 2
 
 
-            CODE    0CA2H     0026H     UNIT         ?PR?_LCD1602_WRITE_WORD?LCD
-            CODE    0CC8H     0025H     UNIT         ?CO?PWM
-            CODE    0CEDH     0020H     UNIT         ?PR?_DELAY_MS?PUBLIC
-            CODE    0D0DH     0020H     UNIT         ?PR?MOTOR_RUN?MONITOR
-            CODE    0D2DH     001CH     UNIT         ?PR?SHOW_READY?LCD
-            CODE    0D49H     001BH     UNIT         ?PR?_LCD1602_WRITE_COM?LCD
-            CODE    0D64H     001AH     UNIT         ?PR?UART_INIT?BLUETOOTH
-            CODE    0D7EH     0014H     UNIT         ?PR?INIT_LCD1602?LCD
-            CODE    0D92H     0013H     UNIT         ?PR?_UART_SENDSTRING?BLUETOOTH
-            CODE    0DA5H     0013H     UNIT         ?PR?TIMER0_INIT?MONITOR
-            CODE    0DB8H     0012H     UNIT         ?PR?_LCD1602_WRITE_DATA?LCD
-            CODE    0DCAH     0011H     UNIT         ?CO?LCD
-            CODE    0DDBH     0011H     UNIT         ?PR?MOTOR_STOP?MONITOR
-            CODE    0DECH     0011H     UNIT         ?PR?MOTOR_FORWARD?MONITOR
-            CODE    0DFDH     0011H     UNIT         ?PR?MOTOR_BACKWARD?MONITOR
-            CODE    0E0EH     0011H     UNIT         ?PR?MOTOR_TURNLEFT?MONITOR
-            CODE    0E1FH     0011H     UNIT         ?PR?MOTOR_TURNRIGHT?MONITOR
-            CODE    0E30H     000CH     UNIT         ?PR?TIME_CONFIG?SONIC
-            CODE    0E3CH     0008H     UNIT         ?PR?_UART_SENDCHAR?BLUETOOTH
-            CODE    0E44H     0008H     UNIT         ?PR?SEND_START_SFR?SONIC
-            CODE    0E4CH     0005H     UNIT         ?PR?DELAY_10US?PUBLIC
+            CODE    0CA4H     003AH     UNIT         ?C_INITSEG
+            CODE    0CDEH     0026H     UNIT         ?PR?_LCD1602_WRITE_WORD?LCD
+            CODE    0D04H     0025H     UNIT         ?CO?PWM
+            CODE    0D29H     0020H     UNIT         ?PR?_DELAY_MS?PUBLIC
+            CODE    0D49H     0020H     UNIT         ?PR?MOTOR_RUN?MONITOR
+            CODE    0D69H     001CH     UNIT         ?PR?SHOW_READY?LCD
+            CODE    0D85H     001BH     UNIT         ?PR?_LCD1602_WRITE_COM?LCD
+            CODE    0DA0H     001AH     UNIT         ?PR?UART_INIT?BLUETOOTH
+            CODE    0DBAH     0014H     UNIT         ?PR?INIT_LCD1602?LCD
+            CODE    0DCEH     0013H     UNIT         ?PR?_UART_SENDSTRING?BLUETOOTH
+            CODE    0DE1H     0013H     UNIT         ?PR?TIMER0_INIT?MONITOR
+            CODE    0DF4H     0012H     UNIT         ?PR?_LCD1602_WRITE_DATA?LCD
+            CODE    0E06H     0011H     UNIT         ?CO?LCD
+            CODE    0E17H     0011H     UNIT         ?PR?MOTOR_STOP?MONITOR
+            CODE    0E28H     0011H     UNIT         ?PR?MOTOR_FORWARD?MONITOR
+            CODE    0E39H     0011H     UNIT         ?PR?MOTOR_BACKWARD?MONITOR
+            CODE    0E4AH     0011H     UNIT         ?PR?MOTOR_TURNLEFT?MONITOR
+            CODE    0E5BH     0011H     UNIT         ?PR?MOTOR_TURNRIGHT?MONITOR
+            CODE    0E6CH     000CH     UNIT         ?PR?TIME_CONFIG?SONIC
+            CODE    0E78H     0008H     UNIT         ?PR?_UART_SENDCHAR?BLUETOOTH
+            CODE    0E80H     0008H     UNIT         ?PR?SEND_START_SFR?SONIC
+            CODE    0E88H     0005H     UNIT         ?PR?DELAY_10US?PUBLIC
 
 
 
@@ -92,7 +93,7 @@ OVERLAY MAP OF MODULE:   MAIN (MAIN)
 SEGMENT                                  DATA_GROUP 
   +--> CALLED SEGMENT                  START    LENGTH
 ------------------------------------------------------
-?PR?UART_ISR?BLUETOOTH                 0021H    0001H
+?PR?UART_ISR?BLUETOOTH                 0008H    0001H
   +--> ?PR?MOTOR_FORWARD?MONITOR
   +--> ?CO?BLUETOOTH
   +--> ?PR?MOTOR_BACKWARD?MONITOR
@@ -103,7 +104,7 @@ SEGMENT                                  DATA_GROUP
   +--> ?PR?_UART_SENDSTRING?BLUETOOTH
   +--> ?PR?_UART_SENDCHAR?BLUETOOTH
 
-?PR?_MOTORSPEEDSET?PWM                 0022H    0001H
+?PR?_MOTORSPEEDSET?PWM                 0009H    0001H
   +--> ?CO?PWM
   +--> ?PR?_UART_SENDSTRING?BLUETOOTH
   +--> ?PR?_UART_SENDCHAR?BLUETOOTH
@@ -118,10 +119,10 @@ SEGMENT                                  DATA_GROUP
   +--> ?PR?MOTOR_STOP?MONITOR
 
 ?PR?MOTOR_RUN?MONITOR                  -----    -----
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  01/31/2026  19:06:00  PAGE 3
+
+
   +--> ?PR?MOTOR_FORWARD?MONITOR
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  01/31/2026  18:51:25  PAGE 3
-
-
   +--> ?PR?MOTOR_BACKWARD?MONITOR
   +--> ?PR?MOTOR_TURNLEFT?MONITOR
   +--> ?PR?MOTOR_TURNRIGHT?MONITOR
@@ -148,7 +149,7 @@ SEGMENT                                  DATA_GROUP
 ?PR?INIT_LCD1602?LCD                   -----    -----
   +--> ?PR?_LCD1602_WRITE_COM?LCD
 
-?PR?_LCD1602_WRITE_COM?LCD             0023H    0001H
+?PR?_LCD1602_WRITE_COM?LCD             000AH    0001H
   +--> ?PR?_DELAY_MS?PUBLIC
 
 ?PR?SHOW_READY?LCD                     -----    -----
@@ -156,7 +157,7 @@ SEGMENT                                  DATA_GROUP
   +--> ?CO?LCD
   +--> ?PR?_LCD1602_WRITE_WORD?LCD
 
-?PR?_LCD1602_WRITE_WORD?LCD            0023H    0003H
+?PR?_LCD1602_WRITE_WORD?LCD            000AH    0003H
   +--> ?PR?_LCD1602_WRITE_DATA?LCD
 
 ?PR?_LCD1602_WRITE_DATA?LCD            -----    -----
@@ -177,27 +178,27 @@ SYMBOL TABLE OF MODULE:  MAIN (MAIN)
   ----------------------------------
 
   -------         MODULE        ?C?CLDPTR
-  C:09A2H         PUBLIC        ?C?CLDPTR
+  C:09D0H         PUBLIC        ?C?CLDPTR
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  01/31/2026  19:06:00  PAGE 4
+
+
   -------         ENDMOD        ?C?CLDPTR
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  01/31/2026  18:51:25  PAGE 4
-
-
 
   -------         MODULE        ?C?IMUL
-  C:09BBH         PUBLIC        ?C?IMUL
+  C:09E9H         PUBLIC        ?C?IMUL
   -------         ENDMOD        ?C?IMUL
 
   -------         MODULE        ?C?UIDIV
-  C:09CDH         PUBLIC        ?C?UIDIV
+  C:09FBH         PUBLIC        ?C?UIDIV
   -------         ENDMOD        ?C?UIDIV
 
   -------         MODULE        ?C?CCASE
-  C:0A22H         PUBLIC        ?C?CCASE
+  C:0A50H         PUBLIC        ?C?CCASE
   -------         ENDMOD        ?C?CCASE
 
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0524H BYTE (64%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0560H BYTE (67%) *
 ******************************************************************************
 
-Program Size: data=39.1 xdata=0 code=1626
+Program Size: data=51.1 xdata=0 code=1686
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
