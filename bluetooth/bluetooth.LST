@@ -1,4 +1,4 @@
-C51 COMPILER V9.57.0.0   BLUETOOTH                                                         01/31/2026 19:06:00 PAGE 1   
+C51 COMPILER V9.57.0.0   BLUETOOTH                                                         01/31/2026 19:20:07 PAGE 1   
 
 
 C51 COMPILER V9.57.0.0, COMPILATION OF MODULE BLUETOOTH
@@ -62,7 +62,7 @@ line level    source
   53   1          if(RI) {
   54   2              RI = 0;                    // 清除接收中断标志
   55   2              received_data = SBUF;      // 读取接收到的数据
-C51 COMPILER V9.57.0.0   BLUETOOTH                                                         01/31/2026 19:06:00 PAGE 2   
+C51 COMPILER V9.57.0.0   BLUETOOTH                                                         01/31/2026 19:20:07 PAGE 2   
 
   56   2              
   57   2              // 状态指示灯闪烁
@@ -73,28 +73,28 @@ line level    source
   62   3                  case 'F':
   63   3                  case 'f':
   64   3                      motor_direction = 1;  // 前进
-  65   3                      if(!pwm_enable) Motor_Forward();  // 未启用PWM时直接驱动
+  65   3                      Motor_Forward();      // 立即响应
   66   3                      UART_SendString("前进\r\n");
   67   3                      break;
   68   3                      
   69   3                  case 'B':
   70   3                  case 'b':
   71   3                      motor_direction = 2;  // 后退
-  72   3                      if(!pwm_enable) Motor_Backward();
+  72   3                      Motor_Backward();     // 立即响应
   73   3                      UART_SendString("后退\r\n");
   74   3                      break;
   75   3                      
   76   3                  case 'L':
   77   3                  case 'l':
   78   3                      motor_direction = 3;  // 左转
-  79   3                      if(!pwm_enable) Motor_TurnLeft();
+  79   3                      Motor_TurnLeft();     // 立即响应
   80   3                      UART_SendString("左转\r\n");
   81   3                      break;
   82   3                      
   83   3                  case 'R':
   84   3                  case 'r':
   85   3                      motor_direction = 4;  // 右转
-  86   3                      if(!pwm_enable) Motor_TurnRight();
+  86   3                      Motor_TurnRight();    // 立即响应
   87   3                      UART_SendString("右转\r\n");
   88   3                      break;
   89   3                      
@@ -116,25 +116,30 @@ line level    source
  105   3                      pwm_enable = 1;
  106   3                      break;
  107   3                      
- 108   3                  default:
- 109   3                      motor_direction = 0;
- 110   3                      Motor_Stop();
- 111   3                      UART_SendString("未知命令，请输入F/B/L/R/S\r\n");
- 112   3                      break;
- 113   3              }
- 114   2              
- 115   2              // 回显接收到的字符
- 116   2              UART_SendChar(received_data);
- 117   2              UART_SendChar('\r');
-C51 COMPILER V9.57.0.0   BLUETOOTH                                                         01/31/2026 19:06:00 PAGE 3   
+ 108   3                  case '\r':  // 忽略回车
+ 109   3                  case '\n':  // 忽略换行
+ 110   3                  case ' ':   // 忽略空格
+ 111   3                      break;
+ 112   3                      
+ 113   3                  default:
+ 114   3                      motor_direction = 0;
+ 115   3                      Motor_Stop();
+ 116   3                      UART_SendString("未知命令，请输入F/B/L/R/S\r\n");
+ 117   3                      break;
+C51 COMPILER V9.57.0.0   BLUETOOTH                                                         01/31/2026 19:20:07 PAGE 3   
 
- 118   2              UART_SendChar('\n');
- 119   2          }
- 120   1      }
+ 118   3              }
+ 119   2              
+ 120   2              // 回显接收到的字符
+ 121   2              UART_SendChar(received_data);
+ 122   2              UART_SendChar('\r');
+ 123   2              UART_SendChar('\n');
+ 124   2          }
+ 125   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    302    ----
+   CODE SIZE        =    299    ----
    CONSTANT SIZE    =     81    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

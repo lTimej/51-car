@@ -19,61 +19,60 @@ void Motor_Stop(void) {
 }
 
 void Motor_Forward(void) {
-    // 电机A正转
+    // 左侧电机 A、C 正转
     MOTOR_A_IA = 1;
     MOTOR_A_IB = 0;
-    // 电机B正转（如果有第二个电机）
-    MOTOR_B_IA = 1;
-    MOTOR_B_IB = 0;
-
-    // 电机A正转
     MOTOR_C_IA = 1;
     MOTOR_C_IB = 0;
-    // 电机B正转（如果有第二个电机）
-    MOTOR_D_IA = 1;
-    MOTOR_D_IB = 0;
-}
 
-void Motor_Backward(void) {
-    // 电机A反转
-    MOTOR_A_IA = 0;
-    MOTOR_A_IB = 1;
-    // 电机B反转
+    // 右侧电机 B、D 正转（安装方向相反，信号反过来）
     MOTOR_B_IA = 0;
     MOTOR_B_IB = 1;
-    // 电机A反转
-    MOTOR_C_IA = 0;
-    MOTOR_C_IB = 1;
-    // 电机B反转
     MOTOR_D_IA = 0;
     MOTOR_D_IB = 1;
 }
 
-void Motor_TurnLeft(void) {
-    // 左转：右轮正转，左轮反转或停止
-    MOTOR_A_IA = 0;  // 左轮停止
-    MOTOR_A_IB = 0;
-    MOTOR_B_IA = 1;  // 右轮正转
-    MOTOR_B_IB = 0;
+void Motor_Backward(void) {
+    // 左侧电机 A、C 反转
+    MOTOR_A_IA = 0;
+    MOTOR_A_IB = 1;
+    MOTOR_C_IA = 0;
+    MOTOR_C_IB = 1;
 
-    // 左转：右轮正转，左轮反转或停止
-    MOTOR_C_IA = 0;  // 左轮停止
-    MOTOR_C_IB = 0;
-    MOTOR_D_IA = 1;  // 右轮正转
+    // 右侧电机 B、D 反转（安装方向相反，信号反过来）
+    MOTOR_B_IA = 1;
+    MOTOR_B_IB = 0;
+    MOTOR_D_IA = 1;
     MOTOR_D_IB = 0;
 }
 
-void Motor_TurnRight(void) {
-    // 右转：左轮正转，右轮反转或停止
-    MOTOR_A_IA = 1;  // 左轮正转
+void Motor_TurnLeft(void) {
+    // 左转：左轮停止，右轮正转
+    // 左侧 A、C 停止
+    MOTOR_A_IA = 0;
     MOTOR_A_IB = 0;
-    MOTOR_B_IA = 0;  // 右轮停止
-    MOTOR_B_IB = 0;
-
-    // 右转：左轮正转，右轮反转或停止
-    MOTOR_C_IA = 1;  // 左轮正转
+    MOTOR_C_IA = 0;
     MOTOR_C_IB = 0;
-    MOTOR_D_IA = 0;  // 右轮停止
+
+    // 右侧 B、D 正转（安装方向相反，信号反过来）
+    MOTOR_B_IA = 0;
+    MOTOR_B_IB = 1;
+    MOTOR_D_IA = 0;
+    MOTOR_D_IB = 1;
+}
+
+void Motor_TurnRight(void) {
+    // 右转：左轮正转，右轮停止
+    // 左侧 A、C 正转
+    MOTOR_A_IA = 1;
+    MOTOR_A_IB = 0;
+    MOTOR_C_IA = 1;
+    MOTOR_C_IB = 0;
+
+    // 右侧 B、D 停止
+    MOTOR_B_IA = 0;
+    MOTOR_B_IB = 0;
+    MOTOR_D_IA = 0;
     MOTOR_D_IB = 0;
 }
 

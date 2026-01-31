@@ -62,28 +62,28 @@ void UART_ISR(void) interrupt 4 {
             case 'F':
             case 'f':
                 motor_direction = 1;  // 前进
-                if(!pwm_enable) Motor_Forward();  // 未启用PWM时直接驱动
+                Motor_Forward();      // 立即响应
                 UART_SendString("前进\r\n");
                 break;
                 
             case 'B':
             case 'b':
                 motor_direction = 2;  // 后退
-                if(!pwm_enable) Motor_Backward();
+                Motor_Backward();     // 立即响应
                 UART_SendString("后退\r\n");
                 break;
                 
             case 'L':
             case 'l':
                 motor_direction = 3;  // 左转
-                if(!pwm_enable) Motor_TurnLeft();
+                Motor_TurnLeft();     // 立即响应
                 UART_SendString("左转\r\n");
                 break;
                 
             case 'R':
             case 'r':
                 motor_direction = 4;  // 右转
-                if(!pwm_enable) Motor_TurnRight();
+                Motor_TurnRight();    // 立即响应
                 UART_SendString("右转\r\n");
                 break;
                 
@@ -103,6 +103,11 @@ void UART_ISR(void) interrupt 4 {
             case 3:
                 MotorSpeedSet(received_data);
                 pwm_enable = 1;
+                break;
+                
+            case '\r':  // 忽略回车
+            case '\n':  // 忽略换行
+            case ' ':   // 忽略空格
                 break;
                 
             default:
