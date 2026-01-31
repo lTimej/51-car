@@ -5,7 +5,7 @@
 #include "bluetooth/bluetooth.h"
 
 // 全局变量
-unsigned char pwm = 0;      // 默认中速
+unsigned char pwm = 5;      // 默认50%占空比
 unsigned char pwm_counter = 0;
   
 
@@ -27,15 +27,19 @@ void MotorSpeedSet(unsigned char speed) {
     switch(speed) {
         case '1': 
         case 1: 
-            pwm += 1;
-            break;  // 30%
+            if(pwm < 10) pwm += 1;  // 加速，最大10
+            break;
         case '2': 
         case 2: 
-            pwm -= 1;
-            break;  // 60%
-        default:            // 默认50%
+            if(pwm > 1) pwm -= 1;   // 减速，最小1
+            break;
+        default:
             pwm = 5;
             break;
+    }
+    // 如果还没设置方向，默认前进
+    if(motor_direction == 0) {
+        motor_direction = 1;
     }
     // 设置速度后使能电机
     pwm_enable = 1;
