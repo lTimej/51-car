@@ -1,4 +1,4 @@
-C51 COMPILER V9.57.0.0   MONITOR                                                           01/31/2026 19:20:07 PAGE 1   
+C51 COMPILER V9.57.0.0   MONITOR                                                           01/31/2026 19:26:53 PAGE 1   
 
 
 C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MONITOR
@@ -62,7 +62,7 @@ line level    source
   53   1          MOTOR_A_IB = 0;
   54   1          MOTOR_C_IA = 0;
   55   1          MOTOR_C_IB = 0;
-C51 COMPILER V9.57.0.0   MONITOR                                                           01/31/2026 19:20:07 PAGE 2   
+C51 COMPILER V9.57.0.0   MONITOR                                                           01/31/2026 19:26:53 PAGE 2   
 
   56   1      
   57   1          // 右侧 B、D 正转（安装方向相反，信号反过来）
@@ -126,7 +126,7 @@ line level    source
  115   2          }
  116   1          // PWM控制逻辑
  117   1          if(pwm_enable) { 
-C51 COMPILER V9.57.0.0   MONITOR                                                           01/31/2026 19:20:07 PAGE 3   
+C51 COMPILER V9.57.0.0   MONITOR                                                           01/31/2026 19:26:53 PAGE 3   
 
  118   2              if(motor_direction == 0 || pwm == 0) {
  119   3                  // 停止或占空比为0%

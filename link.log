@@ -3,8 +3,8 @@ BL51 BANKED LINKER/LOCATER V6.22.2.0 - SN: Eval Version
 COPYRIGHT ARM Germany GmbH 1987 - 2017
 
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 055DH BYTE (67%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0584H BYTE (68%) *
 ******************************************************************************
 
-Program Size: data=51.1 xdata=0 code=1683
+Program Size: data=53.1 xdata=0 code=1722
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

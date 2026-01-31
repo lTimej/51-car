@@ -3,6 +3,7 @@
              // PWM使能标志
 
 extern unsigned char pwm;
+extern unsigned char speed_level;
 extern unsigned char pwm_counter;
 
 

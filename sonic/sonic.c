@@ -13,7 +13,7 @@ unsigned int length = 0;
 
 
 char distance[] = "distance:   cm";
-char speed_str[] = "speed:    %";
+char speed_str[] = "Gear:X      %";
 
 // 使用 Timer2 做超声波计时，避免与 PWM 用的 Timer0 冲突
 void time_config()
@@ -27,11 +27,12 @@ void time_config()
 
 void Display()
 {
-	// 显示 PWM 速度（第一行）
-	// pwm 范围 0-10，对应 0%-100%
-	speed_str[6] = (pwm == 10) ? '1' : ' ';
-	speed_str[7] = (pwm == 10) ? '0' : pwm + '0';
-	speed_str[8] = '0';
+	// 显示挡位和占空比（第一行）
+	// 挡位 1-5，对应 60%-100%
+	speed_str[5] = speed_level + '0';
+	speed_str[7] = (pwm == 10) ? '1' : ' ';
+	speed_str[8] = (pwm == 10) ? '0' : pwm + '0';
+	speed_str[9] = '0';
 	LCD1602_write_com(0x80);
 	LCD1602_write_word(speed_str);
 	
