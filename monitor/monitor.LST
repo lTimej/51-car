@@ -1,0 +1,163 @@
+C51 COMPILER V9.57.0.0   MONITOR                                                           01/31/2026 18:44:13 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MONITOR
+OBJECT MODULE PLACED IN monitor\monitor.OBJ
+COMPILER INVOKED BY: E:\keil_c51\C51\BIN\C51.exe monitor\monitor.c INCDIR(.)
+
+line level    source
+
+   1          #include "public/public.h"
+   2          #include "bluetooth/bluetooth.h"
+   3          #include "monitor.h"
+   4          #include "pwm/pwm.h"
+   5          
+   6          
+   7          // 电机控制函数
+   8          void Motor_Stop(void) {
+   9   1          MOTOR_A_IA = 0;
+  10   1          MOTOR_A_IB = 0;
+  11   1          MOTOR_B_IA = 0;
+  12   1          MOTOR_B_IB = 0;
+  13   1      
+  14   1      
+  15   1          MOTOR_C_IA = 0;
+  16   1          MOTOR_C_IB = 0;
+  17   1          MOTOR_D_IA = 0;
+  18   1          MOTOR_D_IB = 0;
+  19   1      }
+  20          
+  21          void Motor_Forward(void) {
+  22   1          // 电机A正转
+  23   1          MOTOR_A_IA = 1;
+  24   1          MOTOR_A_IB = 0;
+  25   1          // 电机B正转（如果有第二个电机）
+  26   1          MOTOR_B_IA = 1;
+  27   1          MOTOR_B_IB = 0;
+  28   1      
+  29   1          // 电机A正转
+  30   1          MOTOR_C_IA = 1;
+  31   1          MOTOR_C_IB = 0;
+  32   1          // 电机B正转（如果有第二个电机）
+  33   1          MOTOR_D_IA = 1;
+  34   1          MOTOR_D_IB = 0;
+  35   1      }
+  36          
+  37          void Motor_Backward(void) {
+  38   1          // 电机A反转
+  39   1          MOTOR_A_IA = 0;
+  40   1          MOTOR_A_IB = 1;
+  41   1          // 电机B反转
+  42   1          MOTOR_B_IA = 0;
+  43   1          MOTOR_B_IB = 1;
+  44   1          // 电机A反转
+  45   1          MOTOR_C_IA = 0;
+  46   1          MOTOR_C_IB = 1;
+  47   1          // 电机B反转
+  48   1          MOTOR_D_IA = 0;
+  49   1          MOTOR_D_IB = 1;
+  50   1      }
+  51          
+  52          void Motor_TurnLeft(void) {
+  53   1          // 左转：右轮正转，左轮反转或停止
+  54   1          MOTOR_A_IA = 0;  // 左轮停止
+  55   1          MOTOR_A_IB = 0;
+C51 COMPILER V9.57.0.0   MONITOR                                                           01/31/2026 18:44:13 PAGE 2   
+
+  56   1          MOTOR_B_IA = 1;  // 右轮正转
+  57   1          MOTOR_B_IB = 0;
+  58   1      
+  59   1          // 左转：右轮正转，左轮反转或停止
+  60   1          MOTOR_C_IA = 0;  // 左轮停止
+  61   1          MOTOR_C_IB = 0;
+  62   1          MOTOR_D_IA = 1;  // 右轮正转
+  63   1          MOTOR_D_IB = 0;
+  64   1      }
+  65          
+  66          void Motor_TurnRight(void) {
+  67   1          // 右转：左轮正转，右轮反转或停止
+  68   1          MOTOR_A_IA = 1;  // 左轮正转
+  69   1          MOTOR_A_IB = 0;
+  70   1          MOTOR_B_IA = 0;  // 右轮停止
+  71   1          MOTOR_B_IB = 0;
+  72   1      
+  73   1          // 右转：左轮正转，右轮反转或停止
+  74   1          MOTOR_C_IA = 1;  // 左轮正转
+  75   1          MOTOR_C_IB = 0;
+  76   1          MOTOR_D_IA = 0;  // 右轮停止
+  77   1          MOTOR_D_IB = 0;
+  78   1      }
+  79          
+  80          
+  81          
+  82          // 定时器初始化（用于产生PWM）
+  83          void Timer0_Init(void) {
+  84   1          TMOD &= 0xF0; 
+  85   1          TMOD |= 0x01;      // 定时器0，模式1（16位定时器）
+  86   1          // 设置定时器初值，产生约10KHz的PWM
+  87   1          TH0 = 0xFC;  // 100us中断一次 -> 10KHz
+  88   1          TL0 = 0x73;
+  89   1          ET0 = 1;           // 使能定时器0中断
+  90   1          TR0 = 1;           // 启动定时器0
+  91   1          EA = 1;            // 开启总中断
+  92   1      }
+  93          
+  94          
+  95          // 根据 motor_direction 执行对应的电机动作
+  96          static void Motor_Run(void) {
+  97   1          switch(motor_direction) {
+  98   2              case 1: Motor_Forward();  break;
+  99   2              case 2: Motor_Backward(); break;
+ 100   2              case 3: Motor_TurnLeft(); break;
+ 101   2              case 4: Motor_TurnRight(); break;
+ 102   2              default: Motor_Stop();    break;
+ 103   2          }
+ 104   1      }
+ 105          
+ 106          // 定时器0中断服务函数
+ 107          void Timer0_ISR(void) interrupt 1 {
+ 108   1          static unsigned char counter = 0;
+ 109   1          
+ 110   1          TH0 = 0xFC;          // 重装初值
+ 111   1          TL0 = 0x73;
+ 112   1          
+ 113   1          // PWM周期为10ms（10个1ms中断）
+ 114   1          if(++counter >= 10) {
+ 115   2              counter = 0;
+ 116   2          }
+ 117   1          // PWM控制逻辑
+C51 COMPILER V9.57.0.0   MONITOR                                                           01/31/2026 18:44:13 PAGE 3   
+
+ 118   1          if(pwm_enable) { 
+ 119   2              if(motor_direction == 0 || pwm == 0) {
+ 120   3                  // 停止或占空比为0%
+ 121   3                  Motor_Stop();
+ 122   3              } 
+ 123   2              else if(pwm == 10) {
+ 124   3                  // 占空比为100%，电机一直转
+ 125   3                  Motor_Run();
+ 126   3              }
+ 127   2              else {
+ 128   3                  // 根据占空比控制电机
+ 129   3                  if(counter < pwm) {
+ 130   4                      Motor_Run();      // 高电平期间电机转
+ 131   4                  } else {
+ 132   4                      Motor_Stop();     // 低电平期间电机停
+ 133   4                  }
+ 134   3              }
+ 135   2          }
+ 136   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    198    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

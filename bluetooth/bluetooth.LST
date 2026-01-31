@@ -1,0 +1,147 @@
+C51 COMPILER V9.57.0.0   BLUETOOTH                                                         01/31/2026 18:44:12 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE BLUETOOTH
+OBJECT MODULE PLACED IN bluetooth\bluetooth.OBJ
+COMPILER INVOKED BY: E:\keil_c51\C51\BIN\C51.exe bluetooth\bluetooth.c INCDIR(.)
+
+line level    source
+
+   1          #include "public/public.h"
+   2          #include "bluetooth.h"
+   3          #include "monitor/monitor.h"
+   4          #include "pwm/pwm.h"
+   5          
+   6          
+   7          // 串口初始化函数
+   8          void UART_Init(void) {
+   9   1          // 设置定时器1为模式2（8位自动重装）
+  10   1          TMOD &= 0x0F;
+  11   1          TMOD |= 0x20;    // TMOD高4位不变，低4位设为0010
+  12   1          
+  13   1          // 设置波特率为9600
+  14   1          // 晶振11.0592MHz时，TH1 = 0xFD
+  15   1          // 晶振12MHz时，TH1 = 0xF3
+  16   1          TH1 = 0xFD;      // 波特率9600
+  17   1          TL1 = 0xFD;
+  18   1          
+  19   1          // 启动定时器1
+  20   1          TR1 = 1;
+  21   1          
+  22   1          // 设置串口工作方式1（10位异步收发）
+  23   1          SCON = 0x50;     // 0101 0000，模式1，允许接收
+  24   1          
+  25   1          // 使能串口中断
+  26   1          ES = 1;          // 允许串口中断
+  27   1          EA = 1;          // 开启总中断
+  28   1          
+  29   1          // 清空接收标志位
+  30   1          RI = 0;
+  31   1          TI = 0;
+  32   1      }
+  33          
+  34          // 发送一个字符
+  35          void UART_SendChar(unsigned char ch) {
+  36   1          SBUF = ch;        // 将字符放入发送缓冲区
+  37   1          while(!TI);       // 等待发送完成
+  38   1          TI = 0;           // 清除发送中断标志
+  39   1      }
+  40          
+  41          // 发送字符串
+  42          void UART_SendString(unsigned char *str) {
+  43   1          while(*str != '\0') {
+  44   2              UART_SendChar(*str);
+  45   2              str++;
+  46   2          }
+  47   1      }
+  48          
+  49          // 串口中断服务函数
+  50          void UART_ISR(void) interrupt 4 {
+  51   1          unsigned char received_data;
+  52   1          
+  53   1          if(RI) {
+  54   2              RI = 0;                    // 清除接收中断标志
+  55   2              received_data = SBUF;      // 读取接收到的数据
+C51 COMPILER V9.57.0.0   BLUETOOTH                                                         01/31/2026 18:44:12 PAGE 2   
+
+  56   2              
+  57   2              // 状态指示灯闪烁
+  58   2              LED = ~LED;
+  59   2              
+  60   2              // 根据接收到的命令控制电机
+  61   2              switch(received_data) {
+  62   3                  case 'F':
+  63   3                  case 'f':
+  64   3                      motor_direction = 1;  // 前进
+  65   3                      if(!pwm_enable) Motor_Forward();  // 未启用PWM时直接驱动
+  66   3                      UART_SendString("前进\r\n");
+  67   3                      break;
+  68   3                      
+  69   3                  case 'B':
+  70   3                  case 'b':
+  71   3                      motor_direction = 2;  // 后退
+  72   3                      if(!pwm_enable) Motor_Backward();
+  73   3                      UART_SendString("后退\r\n");
+  74   3                      break;
+  75   3                      
+  76   3                  case 'L':
+  77   3                  case 'l':
+  78   3                      motor_direction = 3;  // 左转
+  79   3                      if(!pwm_enable) Motor_TurnLeft();
+  80   3                      UART_SendString("左转\r\n");
+  81   3                      break;
+  82   3                      
+  83   3                  case 'R':
+  84   3                  case 'r':
+  85   3                      motor_direction = 4;  // 右转
+  86   3                      if(!pwm_enable) Motor_TurnRight();
+  87   3                      UART_SendString("右转\r\n");
+  88   3                      break;
+  89   3                      
+  90   3                  case 'S':
+  91   3                  case 's':
+  92   3                      motor_direction = 0;  // 停止
+  93   3                      pwm_enable = 0;       // 关闭PWM
+  94   3                      Motor_Stop();
+  95   3                      UART_SendString("停止\r\n");
+  96   3                      break;
+  97   3                      
+  98   3                  case '1':  // 加速
+  99   3                  case '2':  // 减速
+ 100   3                  case '3':
+ 101   3                  case 1:
+ 102   3                  case 2:
+ 103   3                  case 3:
+ 104   3                      MotorSpeedSet(received_data);
+ 105   3                      pwm_enable = 1;
+ 106   3                      break;
+ 107   3                      
+ 108   3                  default:
+ 109   3                      motor_direction = 0;
+ 110   3                      Motor_Stop();
+ 111   3                      UART_SendString("未知命令，请输入F/B/L/R/S\r\n");
+ 112   3                      break;
+ 113   3              }
+ 114   2              
+ 115   2              // 回显接收到的字符
+ 116   2              UART_SendChar(received_data);
+ 117   2              UART_SendChar('\r');
+C51 COMPILER V9.57.0.0   BLUETOOTH                                                         01/31/2026 18:44:12 PAGE 3   
+
+ 118   2              UART_SendChar('\n');
+ 119   2          }
+ 120   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    302    ----
+   CONSTANT SIZE    =     81    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

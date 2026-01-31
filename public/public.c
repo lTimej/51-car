@@ -3,6 +3,7 @@
 #include "public.h"
 
 bit pwm_enable = 0;
+unsigned char motor_direction = 0;  // 0=停止, 1=前进, 2=后退, 3=左转, 4=右转
 void delay_10us()
 {
 	unsigned char i;

@@ -32,8 +32,6 @@ void Motor_Forward(void) {
     // 电机B正转（如果有第二个电机）
     MOTOR_D_IA = 1;
     MOTOR_D_IB = 0;
-    
-    UART_SendString("前进\r\n");
 }
 
 void Motor_Backward(void) {
@@ -49,8 +47,6 @@ void Motor_Backward(void) {
     // 电机B反转
     MOTOR_D_IA = 0;
     MOTOR_D_IB = 1;
-    
-    UART_SendString("后退\r\n");
 }
 
 void Motor_TurnLeft(void) {
@@ -65,8 +61,6 @@ void Motor_TurnLeft(void) {
     MOTOR_C_IB = 0;
     MOTOR_D_IA = 1;  // 右轮正转
     MOTOR_D_IB = 0;
-    
-    UART_SendString("左转\r\n");
 }
 
 void Motor_TurnRight(void) {
@@ -81,8 +75,6 @@ void Motor_TurnRight(void) {
     MOTOR_C_IB = 0;
     MOTOR_D_IA = 0;  // 右轮停止
     MOTOR_D_IB = 0;
-    
-    UART_SendString("右转\r\n");
 }
 
 
@@ -100,6 +92,17 @@ void Timer0_Init(void) {
 }
 
 
+// 根据 motor_direction 执行对应的电机动作
+static void Motor_Run(void) {
+    switch(motor_direction) {
+        case 1: Motor_Forward();  break;
+        case 2: Motor_Backward(); break;
+        case 3: Motor_TurnLeft(); break;
+        case 4: Motor_TurnRight(); break;
+        default: Motor_Stop();    break;
+    }
+}
+
 // 定时器0中断服务函数
 void Timer0_ISR(void) interrupt 1 {
     static unsigned char counter = 0;
@@ -113,19 +116,18 @@ void Timer0_ISR(void) interrupt 1 {
     }
     // PWM控制逻辑
     if(pwm_enable) { 
-        // Motor_Forward();
-        if(pwm == 0) {
-            // 占空比为0%，电机停止
+        if(motor_direction == 0 || pwm == 0) {
+            // 停止或占空比为0%
             Motor_Stop();
         } 
         else if(pwm == 10) {
             // 占空比为100%，电机一直转
-            Motor_Forward();
+            Motor_Run();
         }
         else {
             // 根据占空比控制电机
-            if(counter < pwm ) {
-                Motor_Forward();  // 高电平期间电机转
+            if(counter < pwm) {
+                Motor_Run();      // 高电平期间电机转
             } else {
                 Motor_Stop();     // 低电平期间电机停
             }

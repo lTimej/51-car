@@ -1,0 +1,83 @@
+C51 COMPILER V9.57.0.0   SONIC                                                             01/31/2026 18:44:13 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE SONIC
+OBJECT MODULE PLACED IN sonic\sonic.OBJ
+COMPILER INVOKED BY: E:\keil_c51\C51\BIN\C51.exe sonic\sonic.c INCDIR(.)
+
+line level    source
+
+   1          #include "sonic.h"
+   2          #include "lcd/lcd.h"
+   3          #include "public/public.h"
+   4          
+   5          
+   6          #define ORG_TIME 0x3CB0         
+   7          #define SOUND_SPEED 340
+   8          
+   9          int flag = 0;
+  10          unsigned int time=0;
+  11          unsigned int length = 0; 
+  12          
+  13          
+  14          char distance[] = "distance:   cm";
+  15          
+  16          // 使用 Timer2 做超声波计时，避免与 PWM 用的 Timer0 冲突
+  17          void time_config()
+  18          {
+  19   1              T2CON = 0;           // Timer2 为 16 位定时器模式
+  20   1              TH2 = 0x3C;
+  21   1              TL2 = 0xB0;
+  22   1              EA = 1;
+  23   1      }
+  24          
+  25          
+  26          void Display()
+  27          {
+  28   1              if(flag == 1)
+  29   1              {
+  30   2                      TH2 = 0x3C;
+  31   2                      TL2 = 0xB0;
+  32   2                      flag = 0;
+  33   2                      distance[9]=distance[10]=distance[11]='-';
+  34   2                      LCD1602_write_com(0x80+0x40);
+  35   2                      LCD1602_write_word(distance);
+  36   2              }
+  37   1              else
+  38   1              {
+  39   2                      time = (TH2<<8) + TL2 - ORG_TIME;
+  40   2                      length = time/20*(SOUND_SPEED/10)/100;
+  41   2                      
+  42   2                      distance[9] = length/100? length/100+ '0': ' ';
+  43   2                      distance[10] = length/10%10 + '0';
+  44   2                      distance[11]= length%10 + '0';
+  45   2      
+  46   2                      LCD1602_write_com(0x80+0x40);
+  47   2                      LCD1602_write_word(distance);
+  48   2                      TH2 = 0x3C;
+  49   2                      TL2 = 0xB0;
+  50   2              }
+  51   1      }
+  52          
+  53          void send_start_sfr()
+  54          {
+  55   1              TR=1;                       
+C51 COMPILER V9.57.0.0   SONIC                                                             01/31/2026 18:44:13 PAGE 2   
+
+  56   1              delay_10us();
+  57   1              TR=0;
+  58   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    189    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     21    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
