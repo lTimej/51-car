@@ -1,59 +1,48 @@
 #include <reg52.h>
 #include <stdio.h>
-#include <pwm.h>
-#include <monitor/monitor.h>
+#include "pwm.h"
+#include "monitor/monitor.h"
+#include "bluetooth/bluetooth.h"
 
+// 全局变量
+unsigned char pwm = 0;      // 默认中速
+unsigned char pwm_counter = 0;
+  
 
-void SetPwm(void) {
+// void SetPwm(void) {
+
+//     if(++pwm_counter >= 10) pwm_counter = 0;
     
-    if(++count >= 10) count = 0;
-    
-    if(pwm <= 0) {
-        Motor_Stop();
-    } else {
-        Motor_Forward();
-    }
-}
+//     if(motor_speed <= 0) {
+//         Motor_Stop();
+//     } else {
+//         Motor_Forward();
+//     }
+
+// }
 
 // ============ 设置电机速度 ============
-void MotorSpeedSet(unsigned char speed_level) {
-    unsigned char speed_value;
+void MotorSpeedSet(unsigned char speed) {
     
-    switch(speed_level) {
-        case '1':  // 低速 - 30%占空比
-            speed_value = 30;
+    switch(speed) {
+        case '1': 
+        case 1: 
+            pwm += 1;
+            break;  // 30%
+        case '2': 
+        case 2: 
+            pwm -= 1;
+            break;  // 60%
+        default:            // 默认50%
+            pwm = 5;
             break;
-            
-        case '2':  // 中速 - 60%占空比
-            speed_value = 60;
-            break;
-            
-        case '3':  // 高速 - 90%占空比
-            speed_value = 90;
-            break;
-        case '+':  // 加速（渐进调速）
-            if(motor_speed < 90) {
-                motor_speed += 10;
-            }
-            speed_value = motor_speed;
-            break;
-            
-        case '-':  // 减速（渐进调速）
-            if(motor_speed > 10) {
-                motor_speed -= 10;
-            }
-            speed_value = motor_speed;
-            break;
-        default:
-            speed_value = 30;
     }
-    
-    // 更新速度值
-    if(speed_level == '1' || speed_level == '2' || speed_level == '3' || 
-       speed_level == '+' || speed_level == '-') {
-        motor_speed = speed_value;
-    }
-    
-    // 使能PWM
+    // 设置速度后使能电机
     pwm_enable = 1;
+    // 反馈设置的速度
+    UART_SendString("速度设置为: ");
+    UART_SendChar(speed);
+    UART_SendString(" (占空比 ");
+    UART_SendChar(pwm + '0');
+    UART_SendString("0%)\r\n");
 }

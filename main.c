@@ -41,10 +41,10 @@ void main(void) {
         // 可以添加其他功能，如按键检测等
         send_start_sfr();		//发送开始信号
         while(!EC);					//等待收到高电平
-        TR0 = 1;						//开始计时
+        T2CON |= 0x04;					//Timer2 开始计时（超声波，TR2=1）
         if(!flag)
             while(EC);
-        TR0 = 0;						//停止计时
+        T2CON &= ~0x04;					//Timer2 停止计时
         Display();					//显示对应数据
         delay_ms(3000);
     }

@@ -13,13 +13,13 @@ unsigned int length = 0;
 
 char distance[] = "distance:   cm";
 
+// 使用 Timer2 做超声波计时，避免与 PWM 用的 Timer0 冲突
 void time_config()
 {
-	TMOD=0x01;    
-	TH0=0x3C;
-	TL0=0xB0;
-	ET0=1;
-	EA=1;
+	T2CON = 0;           // Timer2 为 16 位定时器模式
+	TH2 = 0x3C;
+	TL2 = 0xB0;
+	EA = 1;
 }
 
 
@@ -27,8 +27,8 @@ void Display()
 {
 	if(flag == 1)
 	{
-		TH0=0x3C;
-		TL0=0xB0;
+		TH2 = 0x3C;
+		TL2 = 0xB0;
 		flag = 0;
 		distance[9]=distance[10]=distance[11]='-';
 		LCD1602_write_com(0x80+0x40);
@@ -36,7 +36,7 @@ void Display()
 	}
 	else
 	{
-		time = (TH0<<8) + TL0 - ORG_TIME;
+		time = (TH2<<8) + TL2 - ORG_TIME;
 		length = time/20*(SOUND_SPEED/10)/100;
 		
 		distance[9] = length/100? length/100+ '0': ' ';
@@ -45,8 +45,8 @@ void Display()
 
 		LCD1602_write_com(0x80+0x40);
 		LCD1602_write_word(distance);
-		TH0=0x3C;
-		TL0=0xB0;
+		TH2 = 0x3C;
+		TL2 = 0xB0;
 	}
 }
 

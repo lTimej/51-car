@@ -4,11 +4,10 @@
 #include "pwm/pwm.h"
 
 
-
-
 // 串口初始化函数
 void UART_Init(void) {
     // 设置定时器1为模式2（8位自动重装）
+    TMOD &= 0x0F;
     TMOD |= 0x20;    // TMOD高4位不变，低4位设为0010
     
     // 设置波特率为9600
@@ -29,6 +28,7 @@ void UART_Init(void) {
     
     // 清空接收标志位
     RI = 0;
+    TI = 0;
 }
 
 // 发送一个字符
@@ -50,7 +50,7 @@ void UART_SendString(unsigned char *str) {
 void UART_ISR(void) interrupt 4 {
     unsigned char received_data;
     
-    if(RI == 1) {
+    if(RI) {
         RI = 0;                    // 清除接收中断标志
         received_data = SBUF;      // 读取接收到的数据
         
@@ -88,10 +88,16 @@ void UART_ISR(void) interrupt 4 {
             case '1':  // 低速
             case '2':  // 中速
             case '3':  // 高速
-                MotorSpeedSet(received_data)
+            case 1:
+            case 2:
+            case 3:
+            
+                MotorSpeedSet(received_data);
+                pwm_enable = 1;
                 break;
                 
             default:
+            Motor_Stop();
                 UART_SendString("未知命令，请输入F/B/L/R/S\r\n");
                 break;
         }

@@ -1,7 +1,7 @@
 #include "public/public.h"
 #include "bluetooth/bluetooth.h"
 #include "monitor.h"
-
+#include "pwm/pwm.h"
 
 
 // 电机控制函数
@@ -89,22 +89,46 @@ void Motor_TurnRight(void) {
 
 // 定时器初始化（用于产生PWM）
 void Timer0_Init(void) {
+    TMOD &= 0xF0; 
     TMOD |= 0x01;      // 定时器0，模式1（16位定时器）
     // 设置定时器初值，产生约10KHz的PWM
-    TH0 = (65536 - 100) >> 8;  // 100us中断一次 -> 10KHz
-    TL0 = (65536 - 100) & 0xFF;
+    TH0 = 0xFC;  // 100us中断一次 -> 10KHz
+    TL0 = 0x73;
     ET0 = 1;           // 使能定时器0中断
     TR0 = 1;           // 启动定时器0
     EA = 1;            // 开启总中断
 }
 
+
 // 定时器0中断服务函数
 void Timer0_ISR(void) interrupt 1 {
-    // 重装初值
-    TH0 = (65536 - 100) >> 8;
-    TL0 = (65536 - 100) & 0xFF;
+    static unsigned char counter = 0;
     
-    if(pwm_enable) {
-        SetPwm();
+    TH0 = 0xFC;          // 重装初值
+    TL0 = 0x73;
+    
+    // PWM周期为10ms（10个1ms中断）
+    if(++counter >= 10) {
+        counter = 0;
+    }
+    // PWM控制逻辑
+    if(pwm_enable) { 
+        // Motor_Forward();
+        if(pwm == 0) {
+            // 占空比为0%，电机停止
+            Motor_Stop();
+        } 
+        else if(pwm == 10) {
+            // 占空比为100%，电机一直转
+            Motor_Forward();
+        }
+        else {
+            // 根据占空比控制电机
+            if(counter < pwm ) {
+                Motor_Forward();  // 高电平期间电机转
+            } else {
+                Motor_Stop();     // 低电平期间电机停
+            }
+        }
     }
 }

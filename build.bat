@@ -24,6 +24,7 @@ del bluetooth\*.obj bluetooth\*.lst 2>nul
 del monitor\*.obj monitor\*.lst 2>nul
 del sonic\*.obj sonic\*.lst 2>nul
 del lcd\*.obj lcd\*.lst 2>nul
+del pwm\*.obj pwm\*.lst 2>nul
 
 REM 编译选项: INCDIR 指定头文件搜索路径
 set C51_FLAGS=INCDIR(.)
@@ -78,6 +79,16 @@ if errorlevel 1 (
     exit /b 1
 )
 
+REM 编译 pwm.c
+echo 正在编译 pwm\pwm.c...
+%C51% pwm\pwm.c %C51_FLAGS% > compile_pwm.log 2>&1
+if errorlevel 1 (
+    echo 编译 pwm.c 失败，查看 compile_pwm.log 获取详情
+    type compile_pwm.log
+    pause
+    exit /b 1
+)
+
 REM 编译 main.c
 echo 正在编译 main.c...
 %C51% main.c %C51_FLAGS% > compile_main.log 2>&1
@@ -90,7 +101,7 @@ if errorlevel 1 (
 
 REM 链接所有模块
 echo 正在链接...
-%BL51% main.obj, public\public.obj, lcd\lcd.obj, bluetooth\bluetooth.obj, monitor\monitor.obj, sonic\sonic.obj TO main > link.log 2>&1
+%BL51% main.obj, public\public.obj, lcd\lcd.obj, bluetooth\bluetooth.obj, monitor\monitor.obj, sonic\sonic.obj, pwm\pwm.obj TO main > link.log 2>&1
 if errorlevel 1 (
     echo 链接失败，查看 link.log 获取详情
     type link.log

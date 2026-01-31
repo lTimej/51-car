@@ -67,7 +67,7 @@
     "string_view": "cpp",
     "regx52.h": "c",
     "REGX52.H": "cpp"
-},
+  },
   "editor.suggest.snippetsPreventQuickSuggestions": false,
   "aiXcoder.showTrayIcon": true,
   "C_Cpp_Runner.cCompilerPath": "gcc",

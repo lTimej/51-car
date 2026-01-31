@@ -1,13 +1,14 @@
 #ifndef _pwm_H
 #define _pwm_H
+             // PWM使能标志
 
-// 全局变量
-unsigned char pwm = 3;      // 默认中速
-unsigned char count = 0;
-unsigned char motor_speed = 0;       // 当前速度 0-100
-bit pwm_enable = 0;                  // PWM使能标志
+extern unsigned char pwm;
+extern unsigned char pwm_counter;
+
+
 
 void MotorSpeedSet(unsigned char speed);
+// void SetPwm(void);
 
 
 #endif

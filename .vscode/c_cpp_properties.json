@@ -1,34 +1,33 @@
 {
-    "configurations": [
-        {
-            "name": "8051",
-            "includePath": [
-                "${workspaceFolder}/**",
-                "E:/keil_c51/C51/INC",
-                "E:/keil_c51/C51/INC/Atmel"
-            ],
-            "defines": [
-                "CODE",
-                "DEBUG",
-                "__C51__",           // 定义C51编译器
-                "__XC51__",
-                "__C51__V6__",
-                "bit=unsigned char", // 模拟bit类型
-                "sbit=volatile bit", // 模拟sbit
-                "sfr=volatile unsigned char", // 模拟sfr
-                "code=const",        // code段映射
-                "data=",
-                "idata=",
-                "xdata=",
-                "pdata=",
-                "_at_=",
-                "using=//using",     // 注释掉using关键字
-                "interrupt=//interrupt"
-            ],
-            "compilerPath": "E:/keil_c51/C51/BIN/C51.EXE",
-            "cStandard": "c89",
-            "intelliSenseMode": "windows-gcc-x64"
-        }
-    ],
-    "version": 4
+  "configurations": [
+    {
+      "name": "windows-gcc-x64",
+      "includePath": [
+        "${workspaceFolder}/**"
+      ],
+      "defines": [
+        "CODE",
+        "DEBUG",
+        "__C51__",
+        "__XC51__",
+        "__C51__V6__",
+        "bit=unsigned char",
+        "sbit=volatile bit",
+        "sfr=volatile unsigned char",
+        "code=const",
+        "data=",
+        "idata=",
+        "xdata=",
+        "pdata=",
+        "_at_=",
+        "using=//using",
+        "interrupt=//interrupt"
+      ],
+      "compilerPath": "E:/mingw64/bin/gcc.exe",
+      "cStandard": "${default}",
+      "intelliSenseMode": "windows-gcc-x64",
+      "cppStandard": "${default}"
+    }
+  ],
+  "version": 4
 }

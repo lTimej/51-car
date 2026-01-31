@@ -2,7 +2,7 @@
 #include <intrins.h>
 #include "public.h"
 
-
+bit pwm_enable = 0;
 void delay_10us()
 {
 	unsigned char i;
